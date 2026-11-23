@@ -24,8 +24,11 @@ with DAG(
                 'args=(--as-of "$RUN_DATE" --output-root "$OUTPUT_ROOT" '
                 '--events-path "$EVENTS_PATH" --cities-path "$CITIES_PATH"); '
                 'if [ -n "$HISTORY_START" ]; then args+=(--history-start "$HISTORY_START"); fi; '
-                'spark-submit --master "$SPARK_MASTER" '
-                f'"/lessons/scripts/{mart}_mart.py" "${{args[@]}}"'
+                'spark-submit --master "$SPARK_MASTER" --py-files /lessons/scripts/geo_common.py '
+                + ("--conf spark.sql.autoBroadcastJoinThreshold=-1 "
+                   "--conf spark.sql.adaptive.autoBroadcastJoinThreshold=-1 "
+                   "--conf spark.sql.broadcastTimeout=900 " if mart == "zone" else "")
+                + f'"/lessons/scripts/{mart}_mart.py" "${{args[@]}}"'
             ),
             env={
                 "RUN_DATE": "{{ dag_run.conf.get('as_of') or data_interval_end.subtract(days=1).to_date_string() }}",
