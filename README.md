@@ -38,25 +38,3 @@ hdfs dfs -copyFromLocal -f geo.csv /user/s23483c714ac049239310927bg1/sprint7/ref
   "output_root": "/user/s23483c714ac049239310927bg1/sprint7/analytics"
 }
 ```
-
-## Как отправить проект в GitHub
-
-Скачайте архив `de-project-sprint-7-ready.zip` в «Загрузки». Выполните на Mac в обычном Терминале:
-
-```bash
-archive="$HOME/Downloads/de-project-sprint-7-ready.zip"
-workdir="$(mktemp -d)"
-unzip -q "$archive" -d "$workdir" &&
-git clone --branch main https://github.com/IAskarov/de-project-sprint-7.git "$workdir/repo" &&
-cd "$workdir/repo" &&
-mkdir -p src/dags src/scripts &&
-cp "$workdir/de-project-sprint-7-main/README.md" README.md &&
-cp "$workdir/de-project-sprint-7-main/src/dags/sprint7_geo_marts.py" src/dags/ &&
-cp "$workdir/de-project-sprint-7-main/src/scripts/"*.py src/scripts/ &&
-git add README.md src/dags/sprint7_geo_marts.py src/scripts/*.py &&
-git diff --cached --stat &&
-git commit -m "Добавить геовитрины и DAG для Data Lake" &&
-git push origin main
-```
-
-Пуш выполняется из аккаунта с правом записи в [репозиторий IAskarov/de-project-sprint-7](https://github.com/IAskarov/de-project-sprint-7). После пуша проверьте ветку `main` и нажмите «Отправить на проверку» в Практикуме.
